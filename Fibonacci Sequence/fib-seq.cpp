@@ -26,7 +26,7 @@ int main(){
     start(n);
 
     int c=0, f[n+1];
-    for(int i=0 ; i<n ; ){
+    for(int i=0 ; i<=n ; ){
         if(i==0 || i==1){
             f[c] = i;
             i++;
