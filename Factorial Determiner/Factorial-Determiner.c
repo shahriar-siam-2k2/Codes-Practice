@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<conio.h>
 
 int main() {
     int N, F;
@@ -10,5 +11,6 @@ int main() {
         N = N-1;
     }
     printf("Factorial is %d\n", F);
+    getch();
     return 0;
 }
