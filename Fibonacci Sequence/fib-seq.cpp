@@ -4,13 +4,13 @@ using namespace std;
 
 void start(int &n){
     cout << endl << "----Fibonacci Sequence Creator----" << endl;
-    cout << endl << "Enter your desired range for creating a fibonacci sequence, where the range is a real & positive number (R\"): ";
+    cout << endl << "Enter your desired range for creating a fibonacci sequence, where the range is a positive real number (R\"): ";
     cin >> n;
 
     for( ; ; ){
         if(n<0) {
         cout << endl << "ERROR";
-        cout << endl << "Only real & positive number (R\") is allowed!" << endl;
+        cout << endl << "Only positive real number (R\") is allowed!" << endl;
         cout << endl << "Re-executing this program..." << endl << endl;
         start(n);
         }
