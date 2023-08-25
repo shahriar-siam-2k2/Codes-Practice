@@ -34,9 +34,15 @@ int main(){
             continue;
         }
         else{
-            f[c] = f[c-2] + f[c-1];
-            i = f[c]+1;
-            c++;
+            int t = f[c-2] + f[c-1];
+            if(t<=n){
+                f[c] = t;
+                i = f[c]+1;
+                c++;
+            }
+            else{
+                break;
+            }
         }
     }
     cout << endl << c << " Fibonacci numbers generated: " << endl;
