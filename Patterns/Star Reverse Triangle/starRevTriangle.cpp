@@ -17,10 +17,14 @@ int main(){
     int c = n;
     for(int i=1 ; i <= n ; i++){
         for(int j=1 ; j <= (c*2)-2 ; j++){
-            cout << " ";
+          cout << " ";
         }
-        for(int j=i ; j != 0 ; j--){
-            cout << "* ";
+        for(int j=1 ; j <= i ; ){
+          cout << "*";
+          j++;
+          if(j <= i){
+            cout << " ";
+          }
         }
         cout << endl;
         c--;
