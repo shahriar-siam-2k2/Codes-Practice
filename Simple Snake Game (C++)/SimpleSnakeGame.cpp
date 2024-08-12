@@ -109,6 +109,7 @@ void Input() {
 }
 
 void Logic() {
+    //snake body logic
     for(int i=bodyC ; i>0 ; i--) {
         bodyX[i] = bodyX[i-1];
         bodyY[i] = bodyY[i-1];
@@ -116,6 +117,7 @@ void Logic() {
     bodyX[0] = snakeX;
     bodyY[0] = snakeY;
 
+    //input logic
     if(dir == LEFT) {
         snakeX--;
     }
@@ -129,6 +131,7 @@ void Logic() {
         snakeY++;
     }
 
+    //wall hit logic
     if(wall == "Enabled") {
         if(snakeX < 0 || snakeX > width-1 || snakeY < 0 || snakeY > height-1) {
             gameOver = true;
@@ -151,6 +154,7 @@ void Logic() {
         }
     }
 
+    //body hit logic
     for(int i=0 ; i<bodyC ; i++) {
         if(bodyX[i] == snakeX && bodyY[i] == snakeY) {
             gameOver = true;
@@ -159,6 +163,7 @@ void Logic() {
         }
     }
 
+    //food eating logic
     if(snakeX == foodX && snakeY == foodY) {
         score += 5;
         bodyC++;
@@ -168,7 +173,7 @@ void Logic() {
 }
 
 void Over() {
-    char op;
+    int op;
 
     ConsoleCursor(true);
 
@@ -198,13 +203,13 @@ void Over() {
         cout << "Enter option: ";
         cin >> op;
 
-        if(op == '1') {
-            return;
-        }
-        else if(op == '2') {
-            settings = false;
+        if(op == 1) {
             delete[] bodyX;
             delete[] bodyY;
+            return;
+        }
+        else if(op == 2) {
+            settings = false;
             return;
         }
         else {
@@ -222,8 +227,7 @@ void Over() {
 }
 
 int main() {
-    char op;
-    int speed;
+    int op, speed;
     settings = true;
 
     while(settings == true) {
@@ -241,16 +245,16 @@ int main() {
         cout << "Enter option: ";
         cin >> op;
 
-        if(op == '1' || op == '2' || op == '3') {
-            if(op == '1') {
+        if(op == 1 || op == 2 || op == 3) {
+            if(op == 1) {
                 level = "Easy";
-                speed = 250;
+                speed = 200;
             }
-            else if(op == '2') {
+            else if(op == 2) {
                 level = "Medium";
                 speed = 150;
             }
-            else if(op == '3') {
+            else if(op == 3) {
                 level = "Hard";
                 speed = 50;
             }
@@ -269,11 +273,11 @@ int main() {
                 cout << "Enter option: ";
                 cin >> op;
 
-                if(op == '1' || op == '2') {
-                    if(op == '1') {
+                if(op == 1 || op == 2) {
+                    if(op == 1) {
                         wall = "Enabled";
                     }
-                    else if(op == '2') {
+                    else if(op == 2) {
                         wall = "Disabled";
                     }
 
