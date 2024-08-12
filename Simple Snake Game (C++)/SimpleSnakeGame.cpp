@@ -6,8 +6,8 @@ using namespace std;
 bool gameOver, settings;
 const int width = 20, height = 20;
 int snakeX, snakeY, foodX, foodY, score, bodyC;
-int *bodyX = new int [100];
-int *bodyY = new int [100];
+int *bodyX = nullptr;
+int *bodyY = nullptr;
 string level, wall;
 char over;
 enum eDirection {STOP = 0, LEFT, RIGHT, UP, DOWN};
@@ -26,14 +26,19 @@ void Setup() {
     over = 'n';
     score = 0;
     bodyC = 0;
-    int *bodyX = new int [100];
-    int *bodyY = new int [100];
     dir = STOP;
     snakeX = width / 2;
     snakeY = height / 2;
     foodX = rand() % width;
     foodY = rand() % height;
     ConsoleCursor(false);
+
+    if (bodyX == nullptr) {
+        bodyX = new int[200];
+    }
+    if (bodyY == nullptr) {
+        bodyY = new int[200];
+    }
 }
 
 void Draw() {
@@ -177,6 +182,15 @@ void Over() {
 
     ConsoleCursor(true);
 
+    if (bodyX != nullptr) {
+        delete[] bodyX;
+        bodyX = nullptr;
+    }
+    if (bodyY != nullptr) {
+        delete[] bodyY;
+        bodyY = nullptr;
+    }
+
     while(true) {
         system("cls");
         
@@ -204,8 +218,6 @@ void Over() {
         cin >> op;
 
         if(op == 1) {
-            delete[] bodyX;
-            delete[] bodyY;
             return;
         }
         else if(op == 2) {
