@@ -3,31 +3,38 @@
 #include <windows.h>
 using namespace std;
 
-bool gameOver;
+bool gameOver, settings;
 const int width = 20, height = 20;
 int snakeX, snakeY, foodX, foodY, score, bodyC, bodyX[100], bodyY[100];
 string level, wall;
+char over;
 enum eDirection {STOP = 0, LEFT, RIGHT, UP, DOWN};
 eDirection dir;
 
-void HideCursor()
-{
+void ConsoleCursor(bool visibility) {
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO info;
     info.dwSize = 100;
-    info.bVisible = FALSE;
+    info.bVisible = visibility;
     SetConsoleCursorInfo(consoleHandle, &info);
 }
 
 void Setup() {
     gameOver = false;
+    over = 'n';
     score = 0;
+    bodyC = 0;
     dir = STOP;
     snakeX = width / 2;
     snakeY = height / 2;
     foodX = rand() % width;
     foodY = rand() % height;
-    HideCursor();
+    ConsoleCursor(false);
+
+    for(int i = 0; i < 100; i++) {
+        bodyX[i] = 0;
+        bodyY[i] = 0;
+    }
 }
 
 void Draw() {
@@ -97,6 +104,7 @@ void Input() {
         }
         else if(key == 'x') {
             gameOver = true;
+            over = 'e';
         }
     }
 }
@@ -125,6 +133,7 @@ void Logic() {
     if(wall == "Enabled") {
         if(snakeX < 0 || snakeX > width-1 || snakeY < 0 || snakeY > height-1) {
             gameOver = true;
+            over = 'w';
         }
     }
     else if(wall == "Disabled") {
@@ -146,6 +155,8 @@ void Logic() {
     for(int i=0 ; i<bodyC ; i++) {
         if(bodyX[i] == snakeX && bodyY[i] == snakeY) {
             gameOver = true;
+            over = 'b';
+            break;
         }
     }
 
@@ -157,10 +168,62 @@ void Logic() {
     }
 }
 
+void Over() {
+    char op;
+
+    ConsoleCursor(true);
+
+    while(true) {
+        system("cls");
+        
+        cout << endl << "\tSimple Snake Game" << endl;
+        cout << "   By SHAHRIAR TECHNOLOGIES LTD." << endl << endl;
+
+        cout << "\tGAME OVER" << endl;
+        cout << "Your Score: " << score << endl;
+        
+        if(over == 'w') {
+            cout << "Your snake hit the wall and died." << endl << endl;
+        }
+        else if(over == 'b') {
+            cout << "Your snake hit its own body and died." << endl << endl;
+        }
+        else if(over == 'e') {
+            cout << "You pressed exit button (X key)." << endl << endl;
+        }
+        
+        cout 
+            << "1. Play Again" << endl
+            << "2. Exit" << endl
+        << endl;
+        cout << "Enter option: ";
+        cin >> op;
+
+        if(op == '1') {
+            return;
+        }
+        else if(op == '2') {
+            settings = false;
+            return;
+        }
+        else {
+            system("cls");
+
+            cout << endl << "\tSimple Snake Game" << endl;
+            cout << "   By SHAHRIAR TECHNOLOGIES LTD." << endl << endl;
+
+            cout << "\t* Invalid Input!" << endl;
+            cout << "\t* Press any key to try again....";
+
+            getch();
+        }
+    }
+}
+
 int main() {
     char op;
     int speed;
-    bool settings = true;
+    settings = true;
 
     while(settings == true) {
         system("cls");
@@ -223,7 +286,9 @@ int main() {
                         Logic();
                         Sleep(speed);
                     }
-                    return 0;
+
+                    Over();
+                    break;
                 }
                 else {
                     system("cls");
