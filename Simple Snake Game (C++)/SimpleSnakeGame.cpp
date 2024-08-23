@@ -1,7 +1,20 @@
+#define _WIN32_WINNT 0x0600
+
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
 using namespace std;
+
+#ifndef _CONSOLE_FONT_INFOEX
+typedef struct _CONSOLE_FONT_INFOEX {
+    ULONG cbSize;
+    DWORD nFont;
+    COORD dwFontSize;
+    UINT FontFamily;
+    UINT FontWeight;
+    WCHAR FaceName[LF_FACESIZE];
+} CONSOLE_FONT_INFOEX, *PCONSOLE_FONT_INFOEX;
+#endif
 
 bool gameOver, settings;
 const int width = 20, height = 20;
@@ -12,6 +25,36 @@ string level, wall;
 char over;
 enum eDirection {STOP = 0, LEFT, RIGHT, UP, DOWN};
 eDirection dir;
+
+void setConsoleSize(int width, int height) {
+    HWND console = GetConsoleWindow();
+    RECT r;
+    GetWindowRect(console, &r); // Get the current window size
+    MoveWindow(console, r.left, r.top, width, height, TRUE);
+}
+
+void SetConsoleFontSize(int fontSize) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hConsole == INVALID_HANDLE_VALUE) {
+        std::cerr << "Error getting console handle" << std::endl;
+        return;
+    }
+
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    if (!GetConsoleScreenBufferInfo(hConsole, &csbi)) {
+        std::cerr << "Error getting console screen buffer info" << std::endl;
+        return;
+    }
+
+    // Adjust the buffer size to indirectly affect the font size
+    COORD newSize;
+    newSize.X = csbi.dwSize.X;  // Keep the current width
+    newSize.Y = fontSize;       // Set the new height (font size)
+
+    if (!SetConsoleScreenBufferSize(hConsole, newSize)) {
+        std::cerr << "Error setting console screen buffer size" << std::endl;
+    }
+}
 
 void ConsoleCursor(bool visibility) {
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -44,9 +87,9 @@ void Setup() {
 void Draw() {
     string frame;
 
-    frame += "\n\tSimple Snake Game\n   By SHAHRIAR TECHNOLOGIES LTD.\n\n";
+    frame += "\n\tSnake Bite\n   By SHAHRIAR TECHNOLOGIES LTD.\n\n";
 
-    frame += string((width + 2), '=') + "\n";
+    frame += string((width + 2), '-') + "\n";
     for(int i=0 ; i<width ; i++) {
         for(int j=0 ; j<height ; j++) {
             if(j == 0) {
@@ -79,7 +122,7 @@ void Draw() {
         }
         frame += "\n";
     }
-    frame += string((width + 2), '=') + "\n";
+    frame += string((width + 2), '-') + "\n";
 
     frame += "Score: " + to_string(score) + "\n";
     frame += "Game Level: " + level + "\n";
@@ -194,7 +237,7 @@ void Over() {
     while(true) {
         system("cls");
         
-        cout << endl << "\tSimple Snake Game" << endl;
+        cout << endl << "\tSnake Bite" << endl;
         cout << "   By SHAHRIAR TECHNOLOGIES LTD." << endl << endl;
 
         cout << "\tGAME OVER" << endl;
@@ -227,7 +270,7 @@ void Over() {
         else {
             system("cls");
 
-            cout << endl << "\tSimple Snake Game" << endl;
+            cout << endl << "\tSnake Bite" << endl;
             cout << "   By SHAHRIAR TECHNOLOGIES LTD." << endl << endl;
 
             cout << "\t* Invalid Input!" << endl;
@@ -242,10 +285,13 @@ int main() {
     int op, speed;
     settings = true;
 
+    setConsoleSize(800, 600);
+    SetConsoleFontSize(24);
+
     while(settings == true) {
         system("cls");
 
-        cout << endl << "\tSimple Snake Game" << endl;
+        cout << endl << "\tSnake Bite" << endl;
         cout << "   By SHAHRIAR TECHNOLOGIES LTD." << endl << endl;
 
         cout << "Game Levels (Represents snake moving speed)" << endl;
@@ -268,13 +314,13 @@ int main() {
             }
             else if(op == 3) {
                 level = "Hard";
-                speed = 50;
+                speed = 80;
             }
 
             while(settings == true) {
                 system("cls");
 
-                cout << endl << "\tSimple Snake Game" << endl;
+                cout << endl << "\tSnake Bite" << endl;
                 cout << "   By SHAHRIAR TECHNOLOGIES LTD." << endl << endl;
                 
                 cout << "Wall Restriction" << endl;
@@ -310,7 +356,7 @@ int main() {
                 else {
                     system("cls");
 
-                    cout << endl << "\tSimple Snake Game" << endl;
+                    cout << endl << "\tSnake Bite" << endl;
                     cout << "   By SHAHRIAR TECHNOLOGIES LTD." << endl << endl;
 
                     cout << "\t* Invalid Input!" << endl;
@@ -323,7 +369,7 @@ int main() {
         else {
             system("cls");
 
-            cout << endl << "\tSimple Snake Game" << endl;
+            cout << endl << "\tSnake Bite" << endl;
             cout << "   By SHAHRIAR TECHNOLOGIES LTD." << endl << endl;
 
             cout << "\t* Invalid Input!" << endl;
