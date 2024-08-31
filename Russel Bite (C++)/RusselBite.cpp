@@ -395,7 +395,7 @@ void DevInfo() {
         << "Extra Topics Used: Console Customizations" << endl
         << "(Disabling full screen button & resizing, custom console sizing, centering console, customized font size & cursor)" << endl
         << "Program Features: Memory & CPU Efficiency" << endl
-        << "Source Code: https://t.ly/3Qge8" << endl
+        << "Source Code: https://t.ly/xgNBS" << endl
     << endl << endl;
 
     cout << "Press any key to close...";
