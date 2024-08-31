@@ -19,8 +19,10 @@ eDirection dir;
 void SetConsoleSize(int width, int height) {
     HWND console = GetConsoleWindow();
     RECT r;
-    GetWindowRect(console, &r); // Get the current window size
-    MoveWindow(console, r.left, r.top, width, height, TRUE);
+
+    // Manually set a smaller window size to test
+    GetWindowRect(console, &r);
+    MoveWindow(console, r.left, r.top, width, height, TRUE); // Width = 800, Height = 600
 }
 void DisableConsoleFullscreenButton() {
     HWND consoleWindow = GetConsoleWindow(); // Get the console window handle
@@ -405,11 +407,14 @@ int main() {
     int speed;
     settings = true;
 
+    SetProcessDPIAware();
+
     DisableConsoleFullscreenButton();
     DisableConsoleResize();
     SetConsoleSize(700, 700);
-    SetConsoleFontSize(22);
     CenterConsole();
+    SetConsoleFontSize(20);
+    ConsoleCursor(true);
 
     while (settings == true) {
         system("cls");
